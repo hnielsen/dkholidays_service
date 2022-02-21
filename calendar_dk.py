@@ -62,15 +62,21 @@ class DanishHolidays(object):
             "1. juledag": datetime.date(self.year, 12, 25),
             "2. juledag": datetime.date(self.year, 12, 26),
             "Nytårsaften": datetime.date(self.year, 12, 31),
-            "Nytårssdag": datetime.date(self.year, 1, 1),
+            "Nytårsdag": datetime.date(self.year, 1, 1),
             "Grundlovsdag": datetime.date(self.year, 6, 5),
-        }
+        }        
         return fixed_holidays
     
     def get_danish_holidays_formatted(self, format='{:%d-%m-%Y}'):
         if not self.__holidays:
             self.get_danish_holidays()
         return {k:'{:%d-%m-%Y}'.format(v) for (k,v) in self.__holidays.items()}
+        
+    def get_danish_holidays_api(self):
+        holidays = self.get_danish_holidays_formatted()
+        stats = {"Hverdage" : self.__workdays, "Weekenddage" : self.__weekends}
+        response = { "Stats" : stats, "Holidays" : holidays}
+        return response
         
     def prettyprint(self):
         dict = self.get_danish_holidays_formatted()
